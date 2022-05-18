@@ -238,7 +238,7 @@ fn fixupRelocs(emit: *Emit) InnerError!void {
 fn mirInterrupt(emit: *Emit, inst: Mir.Inst.Index) InnerError!void {
     const tag = emit.mir.instructions.items(.tag)[inst];
     assert(tag == .interrupt);
-    const ops = Mir.Ops.decode(emit.mir.instructions.items(.ops)[inst]);
+    const ops = Mir.Ops(GpRegister, GpRegister).decode(emit.mir.instructions.items(.ops)[inst]);
     switch (ops.flags) {
         0b00 => return lowerToZoEnc(.int3, emit.code),
         else => return emit.fail("TODO handle variant 0b{b} of interrupt instruction", .{ops.flags}),
